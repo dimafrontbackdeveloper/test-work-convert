@@ -1,0 +1,51 @@
+@import './mixins';
+@import './variables';
+
+
+body{
+   font-family: 'Roboto',sans-serif;
+   background: rgb(255, 255, 255);
+}
+
+
+
+.d-f{
+   display: flex;
+}
+
+.d-g{
+   display: grid;
+}
+
+.jc-sb{
+   justify-content: space-between;
+}
+
+.jc-c{
+   justify-content: center;
+}
+
+.ai-c{
+   align-items: center;
+}
+
+.fd-c{
+   flex-direction:column;
+}
+
+.fw-w{
+   flex-wrap: wrap;
+}
+
+.ta-c{
+   text-align: center;
+}
+
+.ta-e{
+   text-align: end;
+}
+
+
+
+
+
