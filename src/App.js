@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from './components/Header';
 import CurrencyConversion from './components/CurrencyConversion';
+import { getCourseEur, getCourseUah, getCourseUsd } from './helpers/helpersFunctions';
 
 function App() {
   // index of select we need to open
@@ -31,29 +32,25 @@ function App() {
   const [courseEurToUsd, setCourseEurToUsd] = useState(null);
   const courseEurToEur = 1;
 
-  const getCourseUah = async () => {
-    const course = await axios('https://api.exchangerate.host/latest?symbols=EUR,USD&base=UAH');
-    setCourseUahToUsd(course.data.rates.USD);
-    setCourseUahToEur(course.data.rates.EUR);
-  };
-
-  const getCourseUsd = async () => {
-    const course = await axios('https://api.exchangerate.host/latest?symbols=EUR,UAH&base=USD');
-    setCourseUsdToUah(course.data.rates.UAH);
-    setCourseUsdToEur(course.data.rates.EUR);
-  };
-
-  const getCourseEur = async () => {
-    const course = await axios('https://api.exchangerate.host/latest?symbols=UAH,USD&base=EUR');
-    setCourseEurToUah(course.data.rates.UAH);
-    setCourseEurToUsd(course.data.rates.USD);
-  };
-
   // set courses of currencies
   useEffect(() => {
-    getCourseUah(); // course UAH to USD and UAH to EUR
-    getCourseUsd(); // course USD to UAH and USD to EUR
-    getCourseEur(); // course EUR to UAH and EUR to USD
+    // course UAH to USD and UAH to EUR
+    getCourseUah().then(({ USD, EUR }) => {
+      setCourseUahToUsd(USD);
+      setCourseUahToEur(EUR);
+    });
+
+    // course USD to UAH and USD to EUR
+    getCourseUsd().then(({ UAH, EUR }) => {
+      setCourseUsdToUah(UAH);
+      setCourseUsdToEur(EUR);
+    });
+
+    // course EUR to UAH and EUR to USD
+    getCourseEur().then(({ UAH, USD }) => {
+      setCourseEurToUah(UAH);
+      setCourseEurToUsd(USD);
+    });
   }, []);
 
   const currencies = [
