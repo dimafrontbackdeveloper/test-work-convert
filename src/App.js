@@ -121,21 +121,20 @@ function App() {
 
   const onChangeCurrencyShouldChangeInputValue = (numberOfInputShouldBeChanged) => {
     switch (numberOfInputShouldBeChanged) {
+      case 0:
+        calculateNewValueOfInput(
+          setSecondInputValue,
+          setFirstInputValue,
+          indexOfActiveCurrencyOfSecond,
+          indexOfActiveCurrencyOfFirst,
+        );
+        break;
       case 1:
         calculateNewValueOfInput(
           setFirstInputValue,
           setSecondInputValue,
           indexOfActiveCurrencyOfFirst,
           indexOfActiveCurrencyOfSecond,
-        );
-
-        break;
-      case 2:
-        calculateNewValueOfInput(
-          setSecondInputValue,
-          setFirstInputValue,
-          indexOfActiveCurrencyOfSecond,
-          indexOfActiveCurrencyOfFirst,
         );
       default:
         break;
@@ -144,7 +143,7 @@ function App() {
 
   // if change first input currency we change first input value
   useEffect(() => {
-    onChangeCurrencyShouldChangeInputValue(2);
+    onChangeCurrencyShouldChangeInputValue(0);
   }, [indexOfActiveCurrencyOfFirst]);
 
   // if change second input currency we change second input value
