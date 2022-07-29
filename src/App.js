@@ -154,8 +154,8 @@ function App() {
 
   // on change input value
   const changeInputValue = (e) => {
-    return (whoInputChanged) => {
-      switch (whoInputChanged) {
+    return (whichInputChanged) => {
+      switch (whichInputChanged) {
         // if first input changed
         case 0:
           validationOfInputValue(
@@ -187,7 +187,7 @@ function App() {
     setIndexOfVisibleChooseCurrency(null);
   };
 
-  // who choose currency should be opened
+  // which choose currency should be opened
   const changeVisibleOfChooseCurrency = (e) => {
     e.stopPropagation();
 
