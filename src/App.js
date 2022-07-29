@@ -3,15 +3,16 @@ import './assets/scss/style.scss';
 import euro from './assets/images/euro-flag.jpg';
 import dollar from './assets/images/america-flag.jpg';
 import hryvnia from './assets/images/ukraine-flag.jpg';
-import change from './assets/images/change.png';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from './components/Header';
 import CurrencyConversion from './components/CurrencyConversion';
 
 function App() {
+  // index of select we need to open
   const [indexOfVisibleChooseCurrency, setIndexOfVisibleChooseCurrency] = useState(null);
 
+  // index of active currency to convertation
   const [indexOfActiveCurrencyOfFirst, setIndexOfActiveCurrencyOfFirst] = useState(0);
   const [indexOfActiveCurrencyOfSecond, setIndexOfActiveCurrencyOfSecond] = useState(0);
 
@@ -48,6 +49,7 @@ function App() {
     setCourseEurToUsd(course.data.rates.USD);
   };
 
+  // set courses of currencies
   useEffect(() => {
     getCourseUah(); // course UAH to USD and UAH to EUR
     getCourseUsd(); // course USD to UAH and USD to EUR
@@ -60,131 +62,140 @@ function App() {
     { img: hryvnia, text: 'UAH' },
   ];
 
-  useEffect(() => {
-    setFirstInputValue((prev) => {
-      setSecondInputValue(
-        prev *
-          eval(
-            `course${currencies[indexOfActiveCurrencyOfFirst].text
-              .toLocaleLowerCase()
-              .split('')
-              .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-              .join('')}To${currencies[indexOfActiveCurrencyOfSecond].text
-              .toLocaleLowerCase()
-              .split('')
-              .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-              .join('')}`,
-          ),
+  // on change selected currency we calculate new value
+  const calculateNewValueOfInput = (
+    setInputValue,
+    changeOfAnotherInputValue,
+    firstIndexOfActiveCurrency,
+    secondIndexOfActiveCurrency,
+  ) => {
+    setInputValue((prev) => {
+      changeOfAnotherInputValue(
+        // if value of first input === '', we change value of second input on ''
+        prev !== ''
+          ? (
+              prev *
+              eval(
+                `course${currencies[firstIndexOfActiveCurrency].text
+                  .toLocaleLowerCase()
+                  .split('')
+                  .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
+                  .join('')}To${currencies[secondIndexOfActiveCurrency].text
+                  .toLocaleLowerCase()
+                  .split('')
+                  .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
+                  .join('')}`,
+              )
+            ).toFixed(2)
+          : '',
       );
+
+      // if value === 01 we change value to 1
+      if (prev[0] === '0') {
+        if (!(prev[1] === '.' || prev[1] === undefined)) {
+          return prev[1];
+        } else {
+          return prev;
+        }
+      }
 
       return prev;
     });
-  }, [indexOfActiveCurrencyOfSecond]);
+  };
 
-  useEffect(() => {
-    setSecondInputValue((prev) => {
-      setFirstInputValue(
-        prev *
-          eval(
-            `course${currencies[indexOfActiveCurrencyOfSecond].text
-              .toLocaleLowerCase()
-              .split('')
-              .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-              .join('')}To${currencies[indexOfActiveCurrencyOfFirst].text
-              .toLocaleLowerCase()
-              .split('')
-              .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-              .join('')}`,
-          ),
-      );
-
-      return prev;
-    });
-  }, [indexOfActiveCurrencyOfFirst]);
-
-  const changeFirstInputValue = (e) => {
+  const validationOfInputValue = (
+    e,
+    setInputValue,
+    changeOfAnotherInputValue,
+    firstIndexOfActiveCurrency,
+    secondIndexOfActiveCurrency,
+  ) => {
     // if value !== string
     if (!isNaN(+e.target.value)) {
-      setFirstInputValue(e.target.value);
-
-      setFirstInputValue((prev) => {
-        setSecondInputValue(
-          // if value of first input === '', we change value of second input on ''
-          prev !== ''
-            ? prev *
-                eval(
-                  `course${currencies[indexOfActiveCurrencyOfFirst].text
-                    .toLocaleLowerCase()
-                    .split('')
-                    .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-                    .join('')}To${currencies[indexOfActiveCurrencyOfSecond].text
-                    .toLocaleLowerCase()
-                    .split('')
-                    .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-                    .join('')}`,
-                )
-            : '',
-        );
-
-        // if value === 01 we change value to 1
-        if (prev[0] === '0') {
-          if (!(prev[1] === '.' || prev[1] === undefined)) {
-            return prev[1];
-          } else {
-            return prev;
-          }
-        }
-
-        return prev;
-      });
+      setInputValue(e.target.value);
+      calculateNewValueOfInput(
+        setInputValue,
+        changeOfAnotherInputValue,
+        firstIndexOfActiveCurrency,
+        secondIndexOfActiveCurrency,
+      );
     }
   };
 
-  const changeSecondInputValue = (e) => {
-    if (!isNaN(+e.target.value)) {
-      setSecondInputValue(e.target.value);
-      setSecondInputValue((prev) => {
-        setFirstInputValue(
-          // if value of second input === '', we change value of first input on ''
-          prev !== ''
-            ? prev *
-                eval(
-                  `course${currencies[indexOfActiveCurrencyOfSecond].text
-                    .toLocaleLowerCase()
-                    .split('')
-                    .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-                    .join('')}To${currencies[indexOfActiveCurrencyOfFirst].text
-                    .toLocaleLowerCase()
-                    .split('')
-                    .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-                    .join('')}`,
-                )
-            : '',
+  const onChangeCurrencyShouldChangeInputValue = (numberOfInputShouldBeChanged) => {
+    switch (numberOfInputShouldBeChanged) {
+      case 1:
+        calculateNewValueOfInput(
+          setFirstInputValue,
+          setSecondInputValue,
+          indexOfActiveCurrencyOfFirst,
+          indexOfActiveCurrencyOfSecond,
         );
 
-        // if value === 01 we change value to 1
-        if (prev[0] === '0') {
-          if (!(prev[1] === '.' || prev[1] === undefined)) {
-            return prev[1];
-          } else {
-            return prev;
-          }
-        }
-
-        return prev;
-      });
+        break;
+      case 2:
+        calculateNewValueOfInput(
+          setSecondInputValue,
+          setFirstInputValue,
+          indexOfActiveCurrencyOfSecond,
+          indexOfActiveCurrencyOfFirst,
+        );
+      default:
+        break;
     }
   };
 
+  // if change first input currency we change first input value
+  useEffect(() => {
+    onChangeCurrencyShouldChangeInputValue(2);
+  }, [indexOfActiveCurrencyOfFirst]);
+
+  // if change second input currency we change second input value
+  useEffect(() => {
+    onChangeCurrencyShouldChangeInputValue(1);
+  }, [indexOfActiveCurrencyOfSecond]);
+
+  // on change input value
+  const changeInputValue = (e) => {
+    return (whoInputChanged) => {
+      switch (whoInputChanged) {
+        // if first input changed
+        case 0:
+          validationOfInputValue(
+            e,
+            setFirstInputValue,
+            setSecondInputValue,
+            indexOfActiveCurrencyOfFirst,
+            indexOfActiveCurrencyOfSecond,
+          );
+          break;
+        // if second input changed
+        case 1:
+          validationOfInputValue(
+            e,
+            setSecondInputValue,
+            setFirstInputValue,
+            indexOfActiveCurrencyOfSecond,
+            indexOfActiveCurrencyOfFirst,
+          );
+          break;
+        default:
+          break;
+      }
+    };
+  };
+
+  // close select currency
   const closeChooseCurrency = () => {
     setIndexOfVisibleChooseCurrency(null);
   };
 
+  // who should be opened
   const changeVisibleOfChooseCurrency = (e) => {
     e.stopPropagation();
 
     return (ind) => {
-      setIndexOfVisibleChooseCurrency(ind);
+      setIndexOfVisibleChooseCurrency((prev) => (prev === ind ? null : ind));
     };
   };
 
@@ -199,9 +210,8 @@ function App() {
         currencies={currencies}
         setIndexOfActiveCurrencyOfFirst={setIndexOfActiveCurrencyOfFirst}
         firstInputValue={firstInputValue}
-        changeFirstInputValue={changeFirstInputValue}
         secondInputValue={secondInputValue}
-        changeSecondInputValue={changeSecondInputValue}
+        changeInputValue={changeInputValue}
         setIndexOfActiveCurrencyOfSecond={setIndexOfActiveCurrencyOfSecond}
       />
     </div>
