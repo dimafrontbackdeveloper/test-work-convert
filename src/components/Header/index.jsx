@@ -1,15 +1,23 @@
 import React from 'react';
 
-const Header = ({ currencies }) => {
+const currenciesSymbols = {
+  dollar: '$',
+  euro: '€',
+  hryvnia: '₴',
+};
+
+const Header = ({ courseUsdToUah, courseEurToUah }) => {
   return (
     <header class="header">
       <div class="container">
         <div class="header__row d-f ai-c fd-c">
           <div class="header__column">
-            1{currencies.dollar} = 40{currencies.hryvnia}
+            1{currenciesSymbols.dollar} = {courseUsdToUah}
+            {currenciesSymbols.hryvnia}
           </div>
           <div class="header__column">
-            1{currencies.euro} = 40{currencies.hryvnia}
+            1{currenciesSymbols.euro} = {courseEurToUah}
+            {currenciesSymbols.hryvnia}
           </div>
         </div>
       </div>

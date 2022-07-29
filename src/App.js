@@ -6,10 +6,11 @@ import hryvnia from './assets/images/ukraine-flag.jpg';
 import change from './assets/images/change.png';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Header from './components/Header';
+import CurrencyConversion from './components/CurrencyConversion';
 
 function App() {
-  const [isVisibleFirstChoose, setIsVisibleFirstChoose] = useState(false);
-  const [isVisibleSecondChoose, setIsVisibleSecondChoose] = useState(false);
+  const [indexOfVisibleChooseCurrency, setIndexOfVisibleChooseCurrency] = useState(null);
 
   const [indexOfActiveCurrencyOfFirst, setIndexOfActiveCurrencyOfFirst] = useState(0);
   const [indexOfActiveCurrencyOfSecond, setIndexOfActiveCurrencyOfSecond] = useState(0);
@@ -175,166 +176,34 @@ function App() {
     }
   };
 
-  const currenciesSymbols = {
-    dollar: '$',
-    euro: '€',
-    hryvnia: '₴',
+  const closeChooseCurrency = () => {
+    setIndexOfVisibleChooseCurrency(null);
   };
 
-  const closeChoose = (numberOfCloseChoose) => {
-    if (isNaN(+numberOfCloseChoose)) {
-      setIsVisibleFirstChoose(false);
-      setIsVisibleSecondChoose(false);
-    }
-
-    if (numberOfCloseChoose === 1) {
-      setIsVisibleFirstChoose(false);
-    }
-
-    if (numberOfCloseChoose === 2) {
-      setIsVisibleSecondChoose(false);
-    }
-  };
-
-  const toggleVisibleOfFirstChoose = (e) => {
+  const changeVisibleOfChooseCurrency = (e) => {
     e.stopPropagation();
-    closeChoose(2);
-    setIsVisibleFirstChoose((prev) => !prev);
-  };
 
-  const toggleVisibleOfSecondChoose = (e) => {
-    e.stopPropagation();
-    closeChoose(1);
-    setIsVisibleSecondChoose((prev) => !prev);
+    return (ind) => {
+      setIndexOfVisibleChooseCurrency(ind);
+    };
   };
 
   return (
-    <div class="wrapper" onClick={closeChoose}>
-      <header class="header">
-        <div class="container">
-          <div class="header__row d-f ai-c fd-c">
-            <div class="header__column">
-              1{currenciesSymbols.dollar} = {courseUsdToUah}
-              {currenciesSymbols.hryvnia}
-            </div>
-            <div class="header__column">
-              1{currenciesSymbols.euro} = {courseEurToUah}
-              {currenciesSymbols.hryvnia}
-            </div>
-          </div>
-        </div>
-      </header>
-      <div class="currency-conversion">
-        <div class="container">
-          <div class="currency-conversion__block">
-            <div class="currency-conversion__row d-g ai-c">
-              <div class="currency-conversion__column">
-                <div class="currency-conversion__choose">
-                  <div
-                    class="currency-conversion__choose-visible d-f jc-sb ai-c"
-                    onClick={toggleVisibleOfFirstChoose}>
-                    <div class="currency-conversion__choose-visible-left d-f ai-c">
-                      <span>
-                        <img src={currencies[indexOfActiveCurrencyOfFirst].img} alt="flag" />
-                      </span>
-                      <span>{currencies[indexOfActiveCurrencyOfFirst].text}</span>
-                    </div>
-                    <div class="currency-conversion__choose-visible-right">&#9660;</div>
-                  </div>
-                  <ul
-                    class={`currency-conversion__choose-hidden ${
-                      isVisibleFirstChoose && 'currency-conversion__choose-hidden--active'
-                    }`}
-                    onClick={(e) => e.stopPropagation()}>
-                    {currencies.map((currency, i) => {
-                      return (
-                        <li
-                          class="d-f ai-c"
-                          onClick={() => {
-                            setIndexOfActiveCurrencyOfFirst(i);
-                            closeChoose(1);
-                          }}
-                          key={i + '_' + currencies.text}>
-                          <span>
-                            <img src={currency.img} alt="flag" />
-                          </span>
-                          <span>{currency.text}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-                <input
-                  class="currency-conversion__amount"
-                  value={firstInputValue}
-                  onChange={changeFirstInputValue}
-                />
-                <div class="currency-conversion__bottom d-f">
-                  {currencies.map((currency, i) => {
-                    return (
-                      <button onClick={() => setIndexOfActiveCurrencyOfFirst(i)}>
-                        {currency.text}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div class="currency-conversion__column">
-                <div class="currency-conversion__choose">
-                  <div
-                    class="currency-conversion__choose-visible d-f jc-sb ai-c"
-                    onClick={toggleVisibleOfSecondChoose}>
-                    <div class="currency-conversion__choose-visible-left d-f ai-c">
-                      <span>
-                        <img src={currencies[indexOfActiveCurrencyOfSecond].img} alt="flag" />
-                      </span>
-                      <span>{currencies[indexOfActiveCurrencyOfSecond].text}</span>
-                    </div>
-                    <div class="currency-conversion__choose-visible-right">&#9660;</div>
-                  </div>
-                  <ul
-                    class={`currency-conversion__choose-hidden ${
-                      isVisibleSecondChoose && 'currency-conversion__choose-hidden--active'
-                    }`}
-                    onClick={(e) => e.stopPropagation()}>
-                    {currencies.map((currency, i) => {
-                      return (
-                        <li
-                          class="d-f ai-c"
-                          onClick={() => {
-                            setIndexOfActiveCurrencyOfSecond(i);
-                            closeChoose(2);
-                          }}
-                          key={i + '_' + currencies.text}>
-                          <span>
-                            <img src={currency.img} alt="flag" />
-                          </span>
-                          <span>{currency.text}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-                <input
-                  class="currency-conversion__amount"
-                  value={secondInputValue}
-                  onChange={changeSecondInputValue}
-                />
-                <div class="currency-conversion__bottom d-f">
-                  {currencies.map((currency, i) => {
-                    return (
-                      <button onClick={() => setIndexOfActiveCurrencyOfSecond(i)}>
-                        {currency.text}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="wrapper" onClick={closeChooseCurrency}>
+      <Header courseUsdToUah={courseUsdToUah} courseEurToUah={courseEurToUah} />
+      <CurrencyConversion
+        indexOfVisibleChooseCurrency={indexOfVisibleChooseCurrency}
+        changeVisibleOfChooseCurrency={changeVisibleOfChooseCurrency}
+        indexOfActiveCurrencyOfFirst={indexOfActiveCurrencyOfFirst}
+        indexOfActiveCurrencyOfSecond={indexOfActiveCurrencyOfSecond}
+        currencies={currencies}
+        setIndexOfActiveCurrencyOfFirst={setIndexOfActiveCurrencyOfFirst}
+        firstInputValue={firstInputValue}
+        changeFirstInputValue={changeFirstInputValue}
+        secondInputValue={secondInputValue}
+        changeSecondInputValue={changeSecondInputValue}
+        setIndexOfActiveCurrencyOfSecond={setIndexOfActiveCurrencyOfSecond}
+      />
     </div>
   );
 }
