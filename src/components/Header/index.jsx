@@ -12,11 +12,11 @@ const Header = ({ courseUsdToUah, courseEurToUah }) => {
       <div class="container">
         <div class="header__row d-f ai-c fd-c">
           <div class="header__column">
-            1{currenciesSymbols.dollar} = {courseUsdToUah}
+            1{currenciesSymbols.dollar} = {courseUsdToUah?.toFixed(2)}
             {currenciesSymbols.hryvnia}
           </div>
           <div class="header__column">
-            1{currenciesSymbols.euro} = {courseEurToUah}
+            1{currenciesSymbols.euro} = {courseEurToUah?.toFixed(2)}
             {currenciesSymbols.hryvnia}
           </div>
         </div>

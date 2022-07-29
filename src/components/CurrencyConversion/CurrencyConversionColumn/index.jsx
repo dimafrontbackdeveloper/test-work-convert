@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 
-import euro from './../../../assets/images/euro-flag.jpg';
-import dollar from './../../../assets/images/america-flag.jpg';
-import hryvnia from './../../../assets/images/ukraine-flag.jpg';
-
 const CurrencyConversionColumn = ({
   id,
   indexOfActiveCurrency,
@@ -26,7 +22,13 @@ const CurrencyConversionColumn = ({
             </span>
             <span>{currencies[indexOfActiveCurrency].text}</span>
           </div>
-          <div class="currency-conversion__choose-visible-right">&#9660;</div>
+          <div
+            class={`currency-conversion__choose-visible-right ${
+              indexOfVisibleChooseCurrency === id &&
+              'currency-conversion__choose-visible-right--active'
+            }`}>
+            &#9660;
+          </div>
         </div>
         <ul
           class={`currency-conversion__choose-hidden ${

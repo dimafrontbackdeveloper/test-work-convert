@@ -42,7 +42,7 @@
 }
 
 .currency-conversion {
-   padding-top: 100px;
+   @include adaptiv-value('padding-top',100,50,0);
 
    // .currency-conversion__block
 
@@ -59,7 +59,11 @@
 
    &__row {
       grid-template-columns: repeat(2,1fr);
-      column-gap: 30px;
+      gap: 30px;
+
+      @include breakpoint(768px){
+         grid-template-columns: 1fr;
+      }
    }
 
    // .currency-conversion__column
@@ -100,7 +104,12 @@
    // .currency-conversion__choose-visible-right
 
    &__choose-visible-right {
-      cursor: pointer;
+      transform: rotate(0deg);
+      transition: 0.2s;
+
+      &--active{
+         transform: rotate(180deg);
+      }
    }
 
    // .currency-conversion__choose-hidden

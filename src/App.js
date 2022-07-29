@@ -1,13 +1,13 @@
 import './assets/scss/style.scss';
 
-import euro from './assets/images/euro-flag.jpg';
-import dollar from './assets/images/america-flag.jpg';
-import hryvnia from './assets/images/ukraine-flag.jpg';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Header from './components/Header';
 import CurrencyConversion from './components/CurrencyConversion';
 import { getCourseEur, getCourseUah, getCourseUsd } from './helpers/helpersFunctions';
+
+import euro from './assets/images/euro-flag.jpg';
+import dollar from './assets/images/america-flag.jpg';
+import hryvnia from './assets/images/ukraine-flag.jpg';
 
 function App() {
   // index of select we need to open
@@ -110,6 +110,7 @@ function App() {
     // if value !== string
     if (!isNaN(+e.target.value)) {
       setInputValue(e.target.value);
+
       calculateNewValueOfInput(
         setInputValue,
         changeOfAnotherInputValue,
@@ -186,7 +187,7 @@ function App() {
     setIndexOfVisibleChooseCurrency(null);
   };
 
-  // who should be opened
+  // who choose currency should be opened
   const changeVisibleOfChooseCurrency = (e) => {
     e.stopPropagation();
 
@@ -201,14 +202,15 @@ function App() {
       <CurrencyConversion
         indexOfVisibleChooseCurrency={indexOfVisibleChooseCurrency}
         changeVisibleOfChooseCurrency={changeVisibleOfChooseCurrency}
+        onChangeCurrencyShouldChangeInputValue={onChangeCurrencyShouldChangeInputValue}
         indexOfActiveCurrencyOfFirst={indexOfActiveCurrencyOfFirst}
         indexOfActiveCurrencyOfSecond={indexOfActiveCurrencyOfSecond}
-        currencies={currencies}
         setIndexOfActiveCurrencyOfFirst={setIndexOfActiveCurrencyOfFirst}
+        setIndexOfActiveCurrencyOfSecond={setIndexOfActiveCurrencyOfSecond}
+        currencies={currencies}
         firstInputValue={firstInputValue}
         secondInputValue={secondInputValue}
         changeInputValue={changeInputValue}
-        setIndexOfActiveCurrencyOfSecond={setIndexOfActiveCurrencyOfSecond}
       />
     </div>
   );
