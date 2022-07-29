@@ -75,6 +75,7 @@ function App() {
               .join('')}`,
           ),
       );
+
       return prev;
     });
   }, [indexOfActiveCurrencyOfSecond]);
@@ -95,29 +96,44 @@ function App() {
               .join('')}`,
           ),
       );
+
       return prev;
     });
   }, [indexOfActiveCurrencyOfFirst]);
 
   const changeFirstInputValue = (e) => {
-    // if value !== string or value !== 01 (02, 03, etc)
+    // if value !== string
     if (!isNaN(+e.target.value)) {
       setFirstInputValue(e.target.value);
+
       setFirstInputValue((prev) => {
         setSecondInputValue(
-          prev *
-            eval(
-              `course${currencies[indexOfActiveCurrencyOfFirst].text
-                .toLocaleLowerCase()
-                .split('')
-                .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-                .join('')}To${currencies[indexOfActiveCurrencyOfSecond].text
-                .toLocaleLowerCase()
-                .split('')
-                .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-                .join('')}`,
-            ),
+          // if value of first input === '', we change value of second input on ''
+          prev !== ''
+            ? prev *
+                eval(
+                  `course${currencies[indexOfActiveCurrencyOfFirst].text
+                    .toLocaleLowerCase()
+                    .split('')
+                    .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
+                    .join('')}To${currencies[indexOfActiveCurrencyOfSecond].text
+                    .toLocaleLowerCase()
+                    .split('')
+                    .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
+                    .join('')}`,
+                )
+            : '',
         );
+
+        // if value === 01 we change value to 1
+        if (prev[0] === '0') {
+          if (!(prev[1] === '.' || prev[1] === undefined)) {
+            return prev[1];
+          } else {
+            return prev;
+          }
+        }
+
         return prev;
       });
     }
@@ -128,19 +144,32 @@ function App() {
       setSecondInputValue(e.target.value);
       setSecondInputValue((prev) => {
         setFirstInputValue(
-          prev *
-            eval(
-              `course${currencies[indexOfActiveCurrencyOfSecond].text
-                .toLocaleLowerCase()
-                .split('')
-                .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-                .join('')}To${currencies[indexOfActiveCurrencyOfFirst].text
-                .toLocaleLowerCase()
-                .split('')
-                .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
-                .join('')}`,
-            ),
+          // if value of second input === '', we change value of first input on ''
+          prev !== ''
+            ? prev *
+                eval(
+                  `course${currencies[indexOfActiveCurrencyOfSecond].text
+                    .toLocaleLowerCase()
+                    .split('')
+                    .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
+                    .join('')}To${currencies[indexOfActiveCurrencyOfFirst].text
+                    .toLocaleLowerCase()
+                    .split('')
+                    .map((item, i) => (i === 0 ? item.toLocaleUpperCase() : item))
+                    .join('')}`,
+                )
+            : '',
         );
+
+        // if value === 01 we change value to 1
+        if (prev[0] === '0') {
+          if (!(prev[1] === '.' || prev[1] === undefined)) {
+            return prev[1];
+          } else {
+            return prev;
+          }
+        }
+
         return prev;
       });
     }
