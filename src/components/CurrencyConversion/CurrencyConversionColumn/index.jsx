@@ -11,19 +11,19 @@ const CurrencyConversionColumn = ({
   indexOfVisibleChooseCurrency,
 }) => {
   return (
-    <div class="currency-conversion__column">
-      <div class="currency-conversion__choose">
+    <div className="currency-conversion__column">
+      <div className="currency-conversion__choose">
         <div
-          class="currency-conversion__choose-visible d-f jc-sb ai-c"
+          className="currency-conversion__choose-visible d-f jc-sb ai-c"
           onClick={(e) => changeVisibleOfChooseCurrency(e)(id)}>
-          <div class="currency-conversion__choose-visible-left d-f ai-c">
+          <div className="currency-conversion__choose-visible-left d-f ai-c">
             <span>
               <img src={currencies[indexOfActiveCurrency].img} alt="flag" />
             </span>
             <span>{currencies[indexOfActiveCurrency].text}</span>
           </div>
           <div
-            class={`currency-conversion__choose-visible-right ${
+            className={`currency-conversion__choose-visible-right ${
               indexOfVisibleChooseCurrency === id &&
               'currency-conversion__choose-visible-right--active'
             }`}>
@@ -31,19 +31,19 @@ const CurrencyConversionColumn = ({
           </div>
         </div>
         <ul
-          class={`currency-conversion__choose-hidden ${
+          className={`currency-conversion__choose-hidden ${
             indexOfVisibleChooseCurrency === id && 'currency-conversion__choose-hidden--active'
           }`}
           onClick={(e) => e.stopPropagation()}>
           {currencies.map((currency, i) => {
             return (
               <li
-                class="d-f ai-c"
+                key={`${currency.text}__${i}`}
+                className="d-f ai-c"
                 onClick={(e) => {
                   setIndexOfActiveCurrency(i);
                   changeVisibleOfChooseCurrency(e)(null);
-                }}
-                key={i + '_' + currencies.text}>
+                }}>
                 <span>
                   <img src={currency.img} alt="flag" />
                 </span>
@@ -54,13 +54,17 @@ const CurrencyConversionColumn = ({
         </ul>
       </div>
       <input
-        class="currency-conversion__amount"
+        className="currency-conversion__amount"
         value={inputValue}
         onChange={(e) => changeInputValue(e)(id)}
       />
-      <div class="currency-conversion__bottom d-f">
+      <div className="currency-conversion__bottom d-f">
         {currencies.map((currency, i) => {
-          return <button onClick={() => setIndexOfActiveCurrency(i)}>{currency.text}</button>;
+          return (
+            <button key={`${currency.text}__${i}`} onClick={() => setIndexOfActiveCurrency(i)}>
+              {currency.text}
+            </button>
+          );
         })}
       </div>
     </div>

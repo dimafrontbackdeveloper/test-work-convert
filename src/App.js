@@ -197,7 +197,7 @@ function App() {
   };
 
   return (
-    <div class="wrapper" onClick={closeChooseCurrency}>
+    <div className="wrapper" onClick={closeChooseCurrency}>
       <Header courseUsdToUah={courseUsdToUah} courseEurToUah={courseEurToUah} />
       <CurrencyConversion
         indexOfVisibleChooseCurrency={indexOfVisibleChooseCurrency}

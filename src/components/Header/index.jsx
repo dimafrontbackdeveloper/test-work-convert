@@ -8,14 +8,14 @@ const currenciesSymbols = {
 
 const Header = ({ courseUsdToUah, courseEurToUah }) => {
   return (
-    <header class="header">
-      <div class="container">
-        <div class="header__row d-f ai-c fd-c">
-          <div class="header__column">
+    <header className="header">
+      <div className="container">
+        <div className="header__row d-f ai-c fd-c">
+          <div className="header__column">
             1{currenciesSymbols.dollar} = {courseUsdToUah?.toFixed(2)}
             {currenciesSymbols.hryvnia}
           </div>
-          <div class="header__column">
+          <div className="header__column">
             1{currenciesSymbols.euro} = {courseEurToUah?.toFixed(2)}
             {currenciesSymbols.hryvnia}
           </div>

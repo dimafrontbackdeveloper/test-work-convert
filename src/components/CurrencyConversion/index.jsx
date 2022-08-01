@@ -29,13 +29,14 @@ const CurrencyConversion = ({
   ];
 
   return (
-    <div class="currency-conversion">
-      <div class="container">
-        <div class="currency-conversion__block">
-          <div class="currency-conversion__row d-g ai-c">
+    <div className="currency-conversion">
+      <div className="container">
+        <div className="currency-conversion__block">
+          <div className="currency-conversion__row d-g ai-c">
             {columns.map((col) => {
               return (
                 <CurrencyConversionColumn
+                  key={col.id}
                   id={col.id}
                   indexOfActiveCurrency={col.indexOfActiveCurrency}
                   setIndexOfActiveCurrency={col.setIndexOfActiveCurrency}
